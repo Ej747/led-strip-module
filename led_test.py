@@ -3,7 +3,7 @@ from utime import sleep
 import neopixel
 
 
-strip_len = 300  # number of leds in strip
+strip_len = 300  # number of leds in strip. neopixel counts first led as 0
 strip_pin = Pin(0)  # gpio pin being used for led strip
 
 strip = neopixel.NeoPixel(strip_pin, strip_len)
@@ -33,10 +33,8 @@ while True:
     strip[8] = (0,0,255)
     strip[10] = (255,255,255)
 
-    # DONT' FORGET THIS
     strip.write()
 
-    # off after 10 sec
     sleep(3)
     clear()
     sleep(2)
@@ -52,3 +50,4 @@ while True:
         sleep(0.001)
 
     sleep(1)
+    clear()
