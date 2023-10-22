@@ -1,11 +1,15 @@
 from machine import Pin
 from utime import sleep
 import neopixel, tm1637
+from rotary_irq_rp2 import RotaryIRQ
 
 strip_len = 300  # number of leds in strip. just remember, neopixel counts the first led as led[0]
 strip_pin = Pin(0)  # gpio pin being used for led strip
 
-strip = neopixel.NeoPixel(strip_pin, strip_len)
+strip = neopixel.NeoPixel(strip_pin, strip_len) # sets neopixel to strip variable
+
+rotary = RotaryIRQ(2,3) # sets rotary pins A and B to GPIO pins 2 and 3
+rotary_button = Pin(4, Pin.IN) # sets rotary button to GPIO pin 4
 
 
 # defining functions
@@ -54,6 +58,11 @@ clear()
 sleep(2)
 
 while True:
+    if rotary_button.value() == 0 & menu_number < 6:
+        menu_number += 1
+    if rotary_button.value() == 0 & menu_number >= 6:
+        menu_number = 1
+
     if menu_number == 1:
         # display 0 then turn off 7 seg disp
         # if encoder is rotated, wake up display for a few seconds
