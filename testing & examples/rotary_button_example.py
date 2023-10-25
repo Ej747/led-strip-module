@@ -11,7 +11,7 @@ from rotary_irq_rp2 import RotaryIRQ
 # Enter the two GPIO pins you connected to data pins A and B
 # Note the order of the pins isn't strict, swapping the pins
 # will swap the direction of change.
-rotary = RotaryIRQ(2, 3)
+rotary = RotaryIRQ(2, 3, pull_up=True)
 
 # If you're using a Standalone Rotary Encoder instead of a module,
 # you might need to enable the internal pull-ups on the Pico
