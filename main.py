@@ -8,8 +8,8 @@ strip_pin = Pin(0)  # gpio pin being used for led strip
 
 strip = neopixel.NeoPixel(strip_pin, strip_len) # sets neopixel to strip variable
 
-rotary = RotaryIRQ(2,3) # sets rotary pins A and B to GPIO pins 2 and 3
-rotary_button = Pin(4, Pin.IN) # sets rotary button to GPIO pin 4
+rotary = RotaryIRQ(2, 3, pull_up=True) # sets rotary pins A and B to GPIO pins 2 and 3
+rotary_button = Pin(4, Pin.IN, Pin.PULL_UP) # sets rotary button to GPIO pin 4
 
 display = tm1637.TM1637(clk=Pin(5), dio=Pin(6))
 
