@@ -11,6 +11,7 @@ strip = neopixel.NeoPixel(strip_pin, strip_len) # sets neopixel to strip variabl
 rotary = RotaryIRQ(2,3) # sets rotary pins A and B to GPIO pins 2 and 3
 rotary_button = Pin(4, Pin.IN) # sets rotary button to GPIO pin 4
 
+disp = tm1637
 
 # defining functions
 # clears all leds

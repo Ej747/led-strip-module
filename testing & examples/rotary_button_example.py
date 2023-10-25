@@ -18,7 +18,7 @@ rotary = RotaryIRQ(2, 3)
 # rotary = RotaryIRQ(2, 3, pull_up=True)
 
 # Enter the pin that SW is connected to on the Pico
-btn = Pin(4, Pin.IN)
+btn = Pin(4, Pin.IN, Pin.PULL_UP) # button between gpio and ground
 
 # Note: the encoder we're using has a built in pull-up on the push button
 #  if you're using a plain rotary encoder you might want to enable the
