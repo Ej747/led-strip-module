@@ -26,7 +26,7 @@ btn = Pin(4, Pin.IN, Pin.PULL_UP) # button between gpio and ground
 
 # btn = Pin(12, Pin.IN, Pin.PULL_UP)
 
-current_val = 0  # Track the last known value of the encoder
+rot_val_1 = 0  # Track the last known value of the encoder
 while True:
     
     if btn.value() == 0:  # Has the button been pressed?
@@ -35,10 +35,11 @@ while True:
         
         time.sleep_ms(250) # A small delay to wait for the button to stop being pressed
         
-    new_val = rotary.value()  # What is the encoder value right now?
-    
-    if current_val != new_val:  # The encoder value has changed!
-        print('Encoder value:', new_val)
         
-        current_val = new_val  # Track this change as the last know value
+    rot_val_2 = rotary.value()  # What is the encoder value right now?
+    
+    if rot_val_1 != rot_val_2:  # The encoder value has changed!
+        print('Encoder value:', rot_val_2)
+        
+        rot_val_1 = rot_val_2  # Track this change as the last know value
 
