@@ -8,6 +8,7 @@ strip_pin = Pin(0)  # gpio pin being used for led strip
 
 strip = neopixel.NeoPixel(strip_pin, strip_len) # sets neopixel to strip variable
 
+
 rotary_p1 = 2 # left rotary pin
 rotary_p2 = 3 # right rotary pin
 rotary_button = Pin(4, Pin.IN, Pin.PULL_UP) # rotary button pin to gpio, other button pin to ground
@@ -19,7 +20,7 @@ display = tm1637.TM1637(clk=Pin(5), dio=Pin(6)) # clk needs SCL and dio needs SD
 ## setting vars
 menu_number = 1
 brightness = r = g = b = o = 0
-brightness = 7       #just for testing. delete after
+brightness = 7     #just for testing. delete after
 rot_val_old = 0
 rot_val_new = 0
 
@@ -32,15 +33,15 @@ def clear():
     strip.write()
 
 # set all leds one color
-def set_all(r, g, b):
+def set_all():
     for i in range(strip_len): # don't need len - 1 because range func stops BEFORE specified number
-        strip[i] = (r, g, b)
+        strip[i] = ((brightness/100)*r, (brightness/100)*g, (brightness/100)*b)
     strip.write()
 
 # sets some leds with an evenly spaced offset (o)
-def set_some(r, g, b, o):
+def set_some():
     if o == 0:
-        set_all(r, g, b)
+        set_all()
 
     if o != 0:
         clear()
@@ -51,7 +52,7 @@ def set_some(r, g, b, o):
         led_list.append(led_list[-1] + o + 1) # add the offset plus 1 to the last number of the list
 
     for led_index in led_list: 
-        strip[led_index] = (r, g, b) # set the leds to the strip
+        strip[led_index] = ((brightness/100)*r, (brightness/100)*g, (brightness/100)*b) # set the leds to the strip
 
     strip.write() # write the leds to the strip
 
@@ -87,7 +88,7 @@ while True:
 
     if menu_number == 1:
         display.show("8888") # just a placeholder for now. i'll make it blank for the final version
-        # add adjustment for brightness of display?
+        # maybe add adjustment for brightness of display?
         print(menu_number, ": display should be off\nbright=", brightness, " r=", r, " b=", b, " g=", g, " o=", o) # just for computer terminal output
     
     if menu_number == 2:
@@ -96,7 +97,7 @@ while True:
         # display brightness value
         display.show("L" + str(zfl(brightness,3)))
         print(menu_number, ": brightness value is: ", brightness)
-        set_some((brightness/100)*r,(brightness/100)*g,(brightness/100)*b,o)
+        set_some()
     
     if menu_number == 3:
         # let encoder adjust r variable
@@ -104,7 +105,7 @@ while True:
         # display r value
         display.show("r" + str(zfl(r,3)))
         print(menu_number, ": r value is: ", r)
-        set_some((brightness/100)*r,(brightness/100)*g,(brightness/100)*b,o)
+        set_some()
 
     if menu_number == 4:
         # let encoder adjust g variable
@@ -112,7 +113,7 @@ while True:
         # display g value
         display.show("g" + str(zfl(g,1)))
         print(menu_number, ": g value is: ", g)
-        set_some((brightness/100)*r,(brightness/100)*g,(brightness/100)*b,o)
+        set_some()
     
     if menu_number == 5:
         # let encoder adjust b variable
@@ -120,7 +121,7 @@ while True:
         # display b value
         display.show("b" + str(zfl(b,3)))
         print(menu_number, ": b value is: ", b)
-        set_some((brightness/100)*r,(brightness/100)*g,(brightness/100)*b,o)
+        set_some()
 
     if menu_number == 6:
         # let encoder adjust offset variable
@@ -128,7 +129,7 @@ while True:
         # display offset value
         display.show("o" + str(zfl(o,3)))
         print(menu_number, ": offset value is: ", o)
-        set_some((brightness/100)*r,(brightness/100)*g,(brightness/100)*b,o)
+        set_some()
 
     if menu_number > 6:
         menu_number = 1
