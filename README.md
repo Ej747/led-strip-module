@@ -1,4 +1,6 @@
 # led-strip-module
+Still a wip
+
 Not exactly necessary to make a github page for this ~~as it's a single python file~~, but I figured it would be easier to keep track of changes.
 
 Powered by a Raspbery Pi Pico running micropython, this controls a strip of ws2812b eco leds.
