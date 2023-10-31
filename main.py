@@ -35,7 +35,7 @@ def clear():
 # set all leds one color
 def set_all():
     for i in range(strip_len): # don't need len - 1 because range func stops BEFORE specified number
-        strip[i] = ((brightness/100)*r, (brightness/100)*g, (brightness/100)*b)
+        strip[i] = (int((brightness/100)*r), int((brightness/100)*g), int((brightness/100)*b))
     strip.write()
 
 # sets some leds with an evenly spaced offset (o)
@@ -52,7 +52,7 @@ def set_some():
         led_list.append(led_list[-1] + o + 1) # add the offset plus 1 to the last number of the list
 
     for led_index in led_list: 
-        strip[led_index] = ((brightness/100)*r, (brightness/100)*g, (brightness/100)*b) # set the leds to the strip
+        strip[led_index] = (int((brightness/100)*r), int((brightness/100)*g), int((brightness/100)*b)) # set the leds to the strip
 
     strip.write() # write the leds to the strip
 
