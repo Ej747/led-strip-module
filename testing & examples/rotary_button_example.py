@@ -11,7 +11,7 @@ from rotary_irq_rp2 import RotaryIRQ
 # Enter the two GPIO pins you connected to data pins A and B
 # Note the order of the pins isn't strict, swapping the pins
 # will swap the direction of change.
-rotary = RotaryIRQ(2, 3, pull_up=True)
+rotary = RotaryIRQ(3, 2, pull_up=True)
 
 # If you're using a Standalone Rotary Encoder instead of a module,
 # you might need to enable the internal pull-ups on the Pico
@@ -26,7 +26,7 @@ btn = Pin(4, Pin.IN, Pin.PULL_UP) # button between gpio and ground
 
 # btn = Pin(12, Pin.IN, Pin.PULL_UP)
 
-rot_val_1 = 0  # Track the last known value of the encoder
+rot_val_old = 0  # Track the last known value of the encoder
 while True:
     
     if btn.value() == 0:  # Has the button been pressed?
@@ -36,10 +36,10 @@ while True:
         time.sleep_ms(250) # A small delay to wait for the button to stop being pressed
         
         
-    rot_val_2 = rotary.value()  # What is the encoder value right now?
+    rot_val_new = rotary.value()  # What is the encoder value right now?
     
-    if rot_val_1 != rot_val_2:  # The encoder value has changed!
-        print('Encoder value:', rot_val_2)
+    if rot_val_old != rot_val_new:  # The encoder value has changed!
+        print('Encoder value:', rot_val_new)
         
-        rot_val_1 = rot_val_2  # Track this change as the last know value
+        rot_val_old = rot_val_new  # Track this change as the last know value
 

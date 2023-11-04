@@ -63,7 +63,7 @@ def zfl(s, width):
     return '{:0>{w}}'.format(s, w=width)
 
 def rotarty_func(va, max): # variable adjusted and max variable value
-    rotary.set(value=va, min_val=0, max_val=max, range_mode=RotaryIRQ.RANGE_WRAP) # not sure about syntax on this one, or if this is the right spot for it
+    rotary.set(value=va, min_val=0, max_val=max) # not sure about syntax on this one, or if this is the right spot for it
     # I basically want to set the current encoder value to the current variable value so the variable doesn't jump to whatever the encoder was last
     # Also set the min and max values for the encoder (0-100 for brightness, 0-255 for rgb, and 0-half of the strip length for the offset)
     rot_val_old = va # old value set to current value of the variable we're adjusting
