@@ -19,8 +19,8 @@ display = tm1637.TM1637(clk=Pin(5), dio=Pin(6)) # clk needs SCL and dio needs SD
 
 ## setting vars
 menu_number = 1
-brightness = r = g = b = o = 0
-brightness = 7     #just for testing. delete after
+bgt = r = g = b = o = 0
+bgt = 95     #just for testing. delete after
 rot_val_old = 0
 rot_val_new = 0
 
@@ -35,7 +35,7 @@ def clear():
 # set all leds one color
 def set_all():
     for i in range(strip_len): # don't need len - 1 because range func stops BEFORE specified number
-        strip[i] = (int((brightness/100)*r), int((brightness/100)*g), int((brightness/100)*b))
+        strip[i] = (int((bgt/100)*r), int((bgt/100)*g), int((bgt/100)*b))
     strip.write()
 
 # sets some leds with an evenly spaced offset (o)
@@ -52,7 +52,7 @@ def set_some():
         led_list.append(led_list[-1] + o + 1) # add the offset plus 1 to the last number of the list
 
     for led_index in led_list: 
-        strip[led_index] = (int((brightness/100)*r), int((brightness/100)*g), int((brightness/100)*b)) # set the leds to the strip
+        strip[led_index] = (int((bgt/100)*r), int((bgt/100)*g), int((bgt/100)*b)) # set the leds to the strip
 
     strip.write() # write the leds to the strip
 
@@ -62,15 +62,15 @@ def zfl(s, width):
     # Force # characters, fill with leading 0's
     return '{:0>{w}}'.format(s, w=width)
 
-def rotarty_func(va, max): # variable adjusted and max variable value
-    rotary.set(value=va, min_val=0, max_val=max) # not sure about syntax on this one, or if this is the right spot for it
+def rotarty_func(vrb_adj, max): # variable adjusted and max variable value
+    rotary.set(value=vrb_adj, min_val=0, max_val=max) # not sure about syntax on this one, or if this is the right spot for it
     # I basically want to set the current encoder value to the current variable value so the variable doesn't jump to whatever the encoder was last
     # Also set the min and max values for the encoder (0-100 for brightness, 0-255 for rgb, and 0-half of the strip length for the offset)
-    rot_val_old = va # old value set to current value of the variable we're adjusting
+    rot_val_old = vrb_adj # old value set to current value of the variable we're adjusting
     rot_val_new = rotary.value() # new value set to current rotary value
 
     if rot_val_old != rot_val_new: # if the old and new values are different
-        va = rotary.value() # make the variable we're adjusting set to the rotary value
+        vrb_adj = rotary.value() # make the variable we're adjusting set to the rotary value
         rot_val_old = rot_val_new # set the old value to the new value
 
 
@@ -89,14 +89,14 @@ while True:
     if menu_number == 1:
         display.show("8888") # just a placeholder for now. i'll make it blank for the final version
         # maybe add adjustment for brightness of display?
-        print(menu_number, ": display should be off\nbright=", brightness, " r=", r, " b=", b, " g=", g, " o=", o) # just for computer terminal output
+        print(menu_number, ": display should be off\nbright=", bgt, " r=", r, " b=", b, " g=", g, " o=", o) # just for computer terminal output
     
     if menu_number == 2:
         # let encoder adjust brightness variable
-        rotarty_func(brightness, 100)
+        rotarty_func(bgt, 100)
         # display brightness value
-        display.show("L" + str(zfl(brightness,3)))
-        print(menu_number, ": brightness value is: ", brightness)
+        display.show("L" + str(zfl(bgt,3)))
+        print(menu_number, ": brightness value is: ", bgt)
         set_some()
     
     if menu_number == 3:
