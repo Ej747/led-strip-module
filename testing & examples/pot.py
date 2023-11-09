@@ -1,3 +1,5 @@
+# This file can basically be ignored. I was using it for testing when I was using a potentiometer instead of a rotary encoder
+
 from machine import ADC #analog-digital conversion
 from utime import sleep #for sleep command
 

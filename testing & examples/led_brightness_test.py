@@ -25,9 +25,15 @@ def set_all():
 clear()
 sleep(2)
 
-brightness = 50
 r=200
 g=90
 b=0
+brightness = 75
 
 set_all()
+sleep(1)
+brightness = 50
+sleep(1)
+brightness = 25
+sleep(1)
+clear()

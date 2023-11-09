@@ -1,3 +1,5 @@
+# This file can basically be ignored. I was using it for testing when I was using a potentiometer instead of a rotary encoder
+
 from machine import ADC, Pin, PWM
 
 pot = ADC(26)
