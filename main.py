@@ -1,5 +1,4 @@
 import machine
-import rotary
 import neopixel
 import time
 import tm1637
