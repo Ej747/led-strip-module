@@ -2,6 +2,10 @@ import machine
 import rotary
 import neopixel
 import time
+import tm1637
+
+# 4 digit 7 segment display setup
+tm = tm1637.TM1637(clk=machine.Pin(5), dio=machine.Pin(6))
 
 # Pins for the rotary encoder
 clk_pin = machine.Pin(2)  # GPIO pin number
