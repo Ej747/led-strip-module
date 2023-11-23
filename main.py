@@ -3,17 +3,22 @@ import rotary
 import neopixel
 import time
 import tm1637
+from rotary_irq_rp2 import RotaryIRQ
 
 # 4 digit 7 segment display setup
 tm = tm1637.TM1637(clk=machine.Pin(5), dio=machine.Pin(6))
 
 # Pins for the rotary encoder
+# not sure about the naming for clk and dt. the rotary just has the pins, they're not really labeled. the 7 seg disp has clk and dio
 clk_pin = machine.Pin(2)  # GPIO pin number
 dt_pin = machine.Pin(3)   # GPIO pin number
-sw_pin = machine.Pin(4)   # GPIO pin number
+sw_pin = machine.Pin(4)   # GPIO pin number     # presumably the rotary button pin? (sw means switch?)
 
 # Rotary object
-r = rotary.Rotary(clk_pin, dt_pin, sw_pin)
+r = RotaryIRQ(dt_pin, clk_pin, pull_up=True)
+# what i did with the other code is i set up the rotary with the rotary pins but treated the button pin as a completely seperate button
+# like this:
+# rotary_button = Pin(4, Pin.IN, Pin.PULL_UP)
 
 # LED settings
 num_leds = 300  # Number of LEDs in the strip
@@ -33,7 +38,8 @@ def set_color(color):
     strip.write()
 
 while True:
-    delta = r.read()
+    delta = r.value()
+    
     
     # Change the LED color based on rotary encoder input
     if delta != 0:
