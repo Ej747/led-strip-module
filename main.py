@@ -4,21 +4,21 @@ import neopixel
 import time
 
 # Pins for the rotary encoder
-clk_pin = machine.Pin(0)  # GPIO pin number
-dt_pin = machine.Pin(1)   # GPIO pin number
-sw_pin = machine.Pin(2)   # GPIO pin number
+clk_pin = machine.Pin(2)  # GPIO pin number
+dt_pin = machine.Pin(3)   # GPIO pin number
+sw_pin = machine.Pin(4)   # GPIO pin number
 
 # Rotary object
 r = rotary.Rotary(clk_pin, dt_pin, sw_pin)
 
 # LED settings
 num_leds = 300  # Number of LEDs in the strip
-led_pin = machine.Pin(3)  # GPIO pin number for the LED strip
+led_pin = machine.Pin(0)  # GPIO pin number for the LED strip
 strip = neopixel.NeoPixel(led_pin, num_leds)
 
 # LED color and brightness settings
 led_colors = [(255, 0, 0)] * num_leds  # Initial color (red) for all LEDs
-brightness = 0.5  # Initial brightness
+brightness = 0.3  # Initial brightness
 
 # Define the last digit of the 4-Digit display
 color_digit = 0  # 0 indicates no color selection
