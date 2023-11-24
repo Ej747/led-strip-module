@@ -17,7 +17,7 @@ sw_pin = machine.Pin(4)   # GPIO pin number     # presumably the rotary button p
 r = RotaryIRQ(dt_pin, clk_pin, pull_up=True)
 # what i did with the other code is i set up the rotary with the rotary pins but treated the button pin as a completely seperate button
 # like this:
-# rotary_button = Pin(4, Pin.IN, Pin.PULL_UP)
+r_button = machine.Pin(4, machine.Pin.IN, machine.Pin.PULL_UP)
 
 # LED settings
 num_leds = 300  # Number of LEDs in the strip
@@ -38,7 +38,10 @@ def set_color(color):
 
 while True:
     delta = r.value()
-    
+
+    if r_button.value() == 0: # if rotary button is pushed
+        color_digit += 1 # increase color digit by 1
+        time.sleep(0.3) # delay to give time for letting go of button so it doesn't run again
     
     # Change the LED color based on rotary encoder input
     if delta != 0:
@@ -59,6 +62,8 @@ while True:
         
         set_color(led_colors)
     
+    current_color = ?
+
     # Update the color_digit based on the selected color
     if current_color == (255, 0, 0):  # Red
         color_digit = 1
