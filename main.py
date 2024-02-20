@@ -20,9 +20,6 @@ display = tm1637.TM1637(clk=Pin(5), dio=Pin(6)) # clk needs SCL and dio needs SD
 ## setting vars
 menu_number = 1
 bgt = r = g = b = o = 0
-bgt = 95     #just for testing. delete after
-g = 127
-
 loop_check = [0, 0, 0, 0, 0, 0]
 
 
@@ -44,7 +41,7 @@ def set_some():
     if o == 0:
         set_all()
 
-    if o != 0:
+    if o != 0 and loop_check[menu_number - 1] == 0:
         clear()
 
     led_list=[0] # starts list for leds that will light up
@@ -72,8 +69,9 @@ def rotarty_func(vrb_adj, max): # variable adjusted and max variable value
 
 ## BEGINNING
 clear() # clear the led strip
-display.show("    ") # make the display blank
-sleep(2)
+display.show("8888")
+sleep(1)
+display.show("    ")
 
 while True:
 
@@ -85,8 +83,9 @@ while True:
     if menu_number == 1:
         display.show("8888") # just a placeholder for now. i'll make it blank for the final version
         # maybe add adjustment for brightness of display?
-        print(menu_number, ": display should be off\nbright=", bgt, " r=", r, " b=", b, " g=", g, " o=", o) # just for computer terminal output
-        sleep(0.2)
+        if loop_check[menu_number-1] == 0:
+            print(menu_number, ": display should be off\nbright=", bgt, " r=", r, " b=", b, " g=", g, " o=", o) # just for computer terminal output
+            loop_check[menu_number - 1] = 1
         
     if menu_number == 2:
         # let encoder adjust brightness variable
@@ -112,7 +111,7 @@ while True:
         rotarty_func(g, 255)
         g = rotary.value()
         # display g value
-        display.show("g" + str(zfl(g,1)))
+        display.show("g" + str(zfl(g,3)))
         set_some()
     
     if menu_number == 5:
