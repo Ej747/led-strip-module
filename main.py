@@ -8,7 +8,6 @@ strip_pin = Pin(0)  # gpio pin being used for led strip
 
 strip = neopixel.NeoPixel(strip_pin, strip_len) # sets neopixel to strip variable
 
-
 rotary_p1 = 2 # left rotary pin
 rotary_p2 = 3 # right rotary pin
 rotary_button = Pin(4, Pin.IN, Pin.PULL_UP) # rotary button pin to gpio, other button pin to ground
@@ -16,10 +15,9 @@ rotary = RotaryIRQ(rotary_p2, rotary_p1, min_val=0, range_mode=RotaryIRQ.RANGE_W
 
 display = tm1637.TM1637(clk=Pin(5), dio=Pin(6)) # clk needs SCL and dio needs SDA
 
-
 ## setting vars
 menu_number = 1
-bgt = r = g = b = o = 0
+bgt = r = g = b = o = o_old = o_new = 0
 loop_check = [0, 0, 0, 0, 0, 0]
 
 
@@ -38,21 +36,30 @@ def set_all():
 
 # sets some leds with an evenly spaced offset (o)
 def set_some():
+    global o_old
+    global o_new
+    
     if o == 0:
         set_all()
 
-    if o != 0 and loop_check[menu_number - 1] == 0:
-        clear()
+    else:
+        if o_new != o_old:
+            for i in range(strip_len):
+                strip[i] = (0,0,0)
+            o_old = o_new
 
-    led_list=[0] # starts list for leds that will light up
+        """if o != 0 and loop_check[menu_number - 1] == 0:
+            clear()"""
 
-    while led_list[-1] < (strip_len - o - 1): # if the last led number in the list is less than the length of the strip minus the offset minus 1
-        led_list.append(led_list[-1] + o + 1) # add the offset plus 1 to the last number of the list
+        led_list=[0] # starts list for leds that will light up
 
-    for led_index in led_list: 
-        strip[led_index] = (int((bgt/100)*r), int((bgt/100)*g), int((bgt/100)*b)) # set the leds to the strip
+        while led_list[-1] < (strip_len - o - 1): # if the last led number in the list is less than the length of the strip minus the offset minus 1
+            led_list.append(led_list[-1] + o + 1) # add the offset plus 1 to the last number of the list
 
-    strip.write() # write the leds to the strip
+        for led_index in led_list: 
+            strip[led_index] = (int((bgt/100)*r), int((bgt/100)*g), int((bgt/100)*b)) # set the leds to the strip
+
+        strip.write() # write the leds to the strip
 
 # sets variable to be a certain number of digits
 def zfl(s, width):
@@ -63,15 +70,18 @@ def zfl(s, width):
 def rotarty_func(vrb_adj, max): # variable adjusted and max variable value
     if loop_check[menu_number - 1] == 0:
         rotary.set(value=vrb_adj, min_val=0, max_val=max)
+        """if o != 0:
+            clear()"""
         loop_check[menu_number - 1] = 1
 
     #vrb_adj = rotary.value()
 
 ## BEGINNING
 clear() # clear the led strip
-display.show("8888")
-sleep(1)
 display.show("    ")
+sleep(1)
+display.show("8888")
+sleep(2)
 
 while True:
 
@@ -81,54 +91,45 @@ while True:
 
 
     if menu_number == 1:
-        display.show("8888") # just a placeholder for now. i'll make it blank for the final version
+        display.show("    ")
         # maybe add adjustment for brightness of display?
         if loop_check[menu_number-1] == 0:
-            print(menu_number, ": display should be off\nbright=", bgt, " r=", r, " b=", b, " g=", g, " o=", o) # just for computer terminal output
+            print(menu_number, ": display should be off\nbright=", bgt, " r=", r, " b=", b, " g=", g, " o=", o)
             loop_check[menu_number - 1] = 1
         
     if menu_number == 2:
-        # let encoder adjust brightness variable
-        print(menu_number, ": bgt: ", bgt, ", loop-check: ", loop_check[menu_number - 1], rotary.value())
+        print(menu_number, ": bgt: ", bgt, ", loop-check: ", loop_check[menu_number - 1], ", rot-val: ", rotary.value())
         rotarty_func(bgt, 100)
         bgt = rotary.value()
-        # display brightness value
         display.show("L" + str(zfl(bgt,3)))
         set_some()
     
     if menu_number == 3:
-        # let encoder adjust r variable
-        print(menu_number, ": r: ", r, ", loop-check: ", loop_check[menu_number - 1], rotary.value())
+        print(menu_number, ": r: ", r, ", loop-check: ", loop_check[menu_number - 1], ", rot-val: ", rotary.value())
         rotarty_func(r, 255)
         r = rotary.value()
-        # display r value
         display.show("r" + str(zfl(r,3)))
         set_some()
 
     if menu_number == 4:
-        # let encoder adjust g variable
-        print(menu_number, ": g: ", g, ", loop-check: ", loop_check[menu_number - 1], rotary.value())
+        print(menu_number, ": g: ", g, ", loop-check: ", loop_check[menu_number - 1], ", rot-val: ", rotary.value())
         rotarty_func(g, 255)
         g = rotary.value()
-        # display g value
         display.show("g" + str(zfl(g,3)))
         set_some()
     
     if menu_number == 5:
-        # let encoder adjust b variable
-        print(menu_number, ": b: ", b, ", loop-check: ", loop_check[menu_number - 1], rotary.value())
+        print(menu_number, ": b: ", b, ", loop-check: ", loop_check[menu_number - 1], ", rot-val: ", rotary.value())
         rotarty_func(b, 255)
         b = rotary.value()
-        # display b value
         display.show("b" + str(zfl(b,3)))
         set_some()
 
     if menu_number == 6:
-        # let encoder adjust offset variable
-        print(menu_number, ": offset: ", o, ", loop-check: ", loop_check[menu_number - 1], rotary.value())
+        print(menu_number, ": offset: ", o, ", loop-check: ", loop_check[menu_number - 1], ", rot-val: ", rotary.value())
         rotarty_func(o, int(strip_len/2))
         o = rotary.value()
-        # display offset value
+        o_new = o
         display.show("o" + str(zfl(o,3)))
         set_some()
 
