@@ -4,16 +4,16 @@ import neopixel, tm1637
 from rotary_irq_rp2 import RotaryIRQ
 
 strip_len = 300  # number of leds in strip. just remember, neopixel counts the first led as led[0]
-strip_pin = Pin(0)  # gpio pin being used for led strip
+strip_pin = Pin(0)  # led strip gpio
 
-strip = neopixel.NeoPixel(strip_pin, strip_len) # sets neopixel to strip variable
+strip = neopixel.NeoPixel(strip_pin, strip_len) # sets strip var to neopixel
 
-rotary_p1 = 2 # left rotary pin
-rotary_p2 = 3 # right rotary pin
+rotary_p1 = 2 # left rotary pin gpio
+rotary_p2 = 3 # right rotary pin gpio
 rotary_button = Pin(4, Pin.IN, Pin.PULL_UP) # rotary button pin to gpio, other button pin to ground
 rotary = RotaryIRQ(rotary_p2, rotary_p1, min_val=0, range_mode=RotaryIRQ.RANGE_WRAP, pull_up=True)
 
-display = tm1637.TM1637(clk=Pin(5), dio=Pin(6)) # clk needs SCL and dio needs SDA
+display = tm1637.TM1637(clk=Pin(5), dio=Pin(6)) # IMPORTANT: clk needs SCL and dio needs SDA
 
 ## setting vars
 menu_number = 1
@@ -22,9 +22,10 @@ loop_check = [0, 0, 0, 0, 0, 0]
 
 
 ## defining functions
+
 # clears all leds
 def clear():
-    for i in range(strip_len): # don't need len - 1 because range func stops BEFORE specified number
+    for i in range(strip_len): # note to self: don't need len - 1 because range func stops BEFORE specified number
         strip[i] = (0,0,0)
     strip.write()
 
@@ -43,13 +44,11 @@ def set_some():
         set_all()
 
     else:
+        # clears all leds when offset val changes so that they're not all on when it's supposed to change
         if o_new != o_old:
             for i in range(strip_len):
                 strip[i] = (0,0,0)
             o_old = o_new
-
-        """if o != 0 and loop_check[menu_number - 1] == 0:
-            clear()"""
 
         led_list=[0] # starts list for leds that will light up
 
@@ -67,14 +66,12 @@ def zfl(s, width):
     # Force # characters, fill with leading 0's
     return '{:0>{w}}'.format(s, w=width)
 
+# sets rotary values on first run in loop
 def rotarty_func(vrb_adj, max): # variable adjusted and max variable value
     if loop_check[menu_number - 1] == 0:
         rotary.set(value=vrb_adj, min_val=0, max_val=max)
-        """if o != 0:
-            clear()"""
         loop_check[menu_number - 1] = 1
 
-    #vrb_adj = rotary.value()
 
 ## BEGINNING
 clear() # clear the led strip
@@ -133,6 +130,7 @@ while True:
         display.show("o" + str(zfl(o,3)))
         set_some()
 
+    # resets loop_check array vals to 0, resets menu_number to 1
     if menu_number > 6:
         for i in range(len(loop_check)):
             loop_check[i-1] = 0
